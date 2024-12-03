@@ -29,7 +29,8 @@ class WilsonAlgorithmSpec extends AnyFlatSpec with Matchers {
         val c = Math.max(0, Math.min(255, 255 - 255 * distance / maxDist))
         val d = 255 - c
         val colour = new Color(c, 120, 120)
-        ((cell.row, cell.col) -> colour)
+        
+        (cell.row, cell.col) -> colour
     }
 
     checkTry(Grid2Png.writeWithColours(maze, outputFile, colours))
