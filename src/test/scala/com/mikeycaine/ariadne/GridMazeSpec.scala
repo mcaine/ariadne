@@ -35,19 +35,19 @@ class GridMazeSpec extends AnyFlatSpec with Matchers {
     val third = gridMaze.at((0,2)).get
 
     assert(!first.isLinkedTo(second))
-    assert(!first.canGo(Some(second)))
+    assert(!first.isLinkedTo(Some(second)))
     assert(!first.isLinkedTo(third))
-    assert(!first.canGo(Some(third)))
+    assert(!first.isLinkedTo(Some(third)))
     assert(!second.isLinkedTo(third))
-    assert(!second.canGo(Some(third)))
+    assert(!second.isLinkedTo(Some(third)))
 
     first.link(second)
 
     assert(first.isLinkedTo(second))
-    assert(first.canGo(Some(second)))
-    assert(!first.canGo(Some(third)))
+    assert(first.isLinkedTo(Some(second)))
+    assert(!first.isLinkedTo(Some(third)))
     assert(!first.isLinkedTo(third))
     assert(!second.isLinkedTo(third))
-    assert(!second.canGo(Some(third)))
+    assert(!second.isLinkedTo(Some(third)))
   }
 }
