@@ -7,11 +7,11 @@ import javax.imageio.ImageIO
 import scala.util.Try
 
 object Grid2Png {
-  
-  val gridScaleFactor = 20
-  val border = gridScaleFactor / 2
-  val strokeWidth = 4
-  val doubleBorder = 2 * border
+
+  val gridScaleFactor: Int = 20
+  val border: Int = gridScaleFactor / 2
+  val strokeWidth: Int = 4
+  val doubleBorder: Int = 2 * border
 
   def bufferedImageForGrid(grid: GridMaze, colours: Map[(Int, Int), Color] = Map()): BufferedImage = {
     val imageWidth = grid.columns * gridScaleFactor + doubleBorder + 1

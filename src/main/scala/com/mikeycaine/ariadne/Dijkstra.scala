@@ -1,6 +1,6 @@
 package com.mikeycaine.ariadne
 
-case class Dijkstra(val maze: GridMaze) {
+case class Dijkstra(maze: GridMaze) {
 
   def distances(fromRow: Int, fromCol: Int): Map[Cell, Int] = {
     var d = Map[Cell, Int]()
@@ -10,7 +10,7 @@ case class Dijkstra(val maze: GridMaze) {
       d += (from -> 0)
       var frontier = List[Cell](from)
 
-      while (!frontier.isEmpty) {
+      while (frontier.nonEmpty) {
 
         var newFrontier = List[Cell]()
 
