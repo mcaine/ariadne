@@ -47,9 +47,9 @@ case class Cell(row: Int, col: Int, grid: GridMaze) { me: Cell =>
   def canGoTo: List[Cell] = links.toList
 }
 
-case class GridMaze(rows: Int, columns: Int ) extends Maze[(Int,Int), Cell] { me =>
+case class GridMaze(rows: Int, cols: Int ) extends Maze[(Int,Int), Cell] { me =>
   override def initCells: Map[(Int, Int), Cell] = (for {
     row <- 0 until rows
-    col <- 0 until columns
+    col <- 0 until cols
   } yield (row, col) -> Cell(row, col, me)).toMap
 }

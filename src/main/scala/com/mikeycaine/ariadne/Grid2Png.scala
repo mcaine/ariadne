@@ -14,7 +14,7 @@ object Grid2Png {
   val doubleBorder: Int = 2 * border
 
   def bufferedImageForGrid(grid: GridMaze, colours: Map[(Int, Int), Color] = Map()): BufferedImage = {
-    val imageWidth = grid.columns * gridScaleFactor + doubleBorder + 1
+    val imageWidth = grid.cols * gridScaleFactor + doubleBorder + 1
     val imageHeight = grid.rows * gridScaleFactor + doubleBorder + 1
 
     val imageType = BufferedImage.TYPE_INT_RGB
@@ -36,7 +36,7 @@ object Grid2Png {
 
     for {
       row <- 0 until grid.rows
-      column <- 0 until grid.columns
+      column <- 0 until grid.cols
     } {
       val (x1, y1, x2, y2) = corners(row, column)
       grid.at(row, column).foreach { cell =>
