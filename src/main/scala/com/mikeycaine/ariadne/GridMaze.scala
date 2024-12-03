@@ -26,7 +26,7 @@ case class Cell(row: Int, col: Int, grid: GridMaze) { me: Cell =>
     }
   }
 
-  def isLinkedTo(target: Cell) = links.contains(target)
+  def isLinkedTo(target: Cell): Boolean = links.contains(target)
   def isLinkedTo(targetOpt: Option[Cell]): Boolean = targetOpt match {
     case Some(cell) => isLinkedTo(cell)
     case _ => false
@@ -47,7 +47,7 @@ case class Cell(row: Int, col: Int, grid: GridMaze) { me: Cell =>
   def canGoTo: List[Cell] = links.toList
 }
 
-case class GridMaze(val rows: Int, val columns: Int ) extends Maze[(Int,Int), Cell] { me =>
+case class GridMaze(rows: Int, columns: Int ) extends Maze[(Int,Int), Cell] { me =>
   override def initCells: Map[(Int, Int), Cell] = (for {
     row <- 0 until rows
     col <- 0 until columns

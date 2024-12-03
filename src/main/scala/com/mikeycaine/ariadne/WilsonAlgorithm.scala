@@ -15,7 +15,7 @@ object WilsonAlgorithm {
     var first = sample(unvisited)
     unvisited = unvisited.filter(_ != first)
 
-    while (unvisited.size > 0) {
+    while (unvisited.nonEmpty) {
 
       var cell = sample(unvisited)
       var path = List(cell)
