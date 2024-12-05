@@ -1,46 +1,36 @@
 package com.mikeycaine.ariadne
 
-import java.util.Random
-
 object HunterKillerAlgorithm {
 
-  import Utils._
+  import Utils.*
 
   def randomCell(maze: Maze[_, Cell]): Cell = sample(maze.allCells)
+  def unvisitedNeighbours(cell: Cell): List[Cell] = cell.neighbours.filter(_.canGoTo.isEmpty)
+  def visitedNeighbours(cell: Cell): List[Cell] = cell.neighbours.filter(_.canGoTo.nonEmpty)
+  def unlinkedCells(maze: Maze[_, Cell]) = maze.allCells.filter(_.canGoTo.isEmpty)
 
   private def linkIt(maze: Maze[_, Cell]): Unit = {
 
-    val start = randomCell(maze)
-
-    var current: Option[Cell] = Some(start)
-
-    while (current.isDefined) {
-      current match {
-        case Some(currentCell) => {
-          val unvisitedNeighbours
-            = currentCell.neighbours.filter(cell => cell.canGoTo.isEmpty)
-
-          if (unvisitedNeighbours.nonEmpty) {
-            val neighbour = sample(unvisitedNeighbours)
-            currentCell.link(neighbour)
-            current = Some(neighbour)
-          } else {
-            current = None
-            for (cell <- maze.allCells) {
-              if (current.isEmpty && cell.canGoTo.isEmpty) {
-                val visitedNeighbours = cell.neighbours.filter(_.canGoTo.nonEmpty)
-                if (visitedNeighbours.nonEmpty) {
-                  val neighbour = sample(visitedNeighbours)
-                  cell.link(neighbour)
-                  current = Some(cell)
-                }
-              }
-            }
-          }
+    @annotation.tailrec
+    def process(current: Cell): Unit = {
+      val unvisited = unvisitedNeighbours(current)
+      if (unvisited.nonEmpty) {
+        val neighbour = sample(unvisited)
+        current.link(neighbour)
+        process(neighbour)
+      } else {
+        val unlinked = unlinkedCells(maze)
+        val candidates = unlinked.filter(visitedNeighbours(_).nonEmpty)
+        if (candidates.nonEmpty) {
+          val next = sample(candidates)
+          val neighbour = sample(visitedNeighbours(next))
+          next.link(neighbour)
+          process(next)
         }
-        case _ =>
       }
     }
+
+    process(randomCell(maze))
   }
 
   def apply(rows: Int, cols: Int): GridMaze = {
