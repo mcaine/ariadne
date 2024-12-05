@@ -1,5 +1,7 @@
 package com.mikeycaine.ariadne
 
+import java.awt.Color
+
 trait Maze[K,C] {
   private var cells: Map[K,C] = initCells
   def initCells: Map[K,C]
@@ -52,4 +54,16 @@ case class GridMaze(rows: Int, cols: Int ) extends Maze[(Int,Int), Cell] { me =>
     row <- 0 until rows
     col <- 0 until cols
   } yield (row, col) -> Cell(row, col, me)).toMap
+}
+
+object GridMaze {
+  def distanceColours(d: Map[Cell, Int]): Map[(Int, Int), Color] = {
+    val maxDist = d.values.max
+    val colours: Map[(Int, Int), Color] = d map {
+      case (cell: Cell, distance) =>
+        val c = Math.max(0, Math.min(255, 255 - 255 * distance / maxDist))
+        (cell.row, cell.col) -> new Color(c, 120, 120)
+    }
+    colours.toMap
+  }
 }

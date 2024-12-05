@@ -5,6 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 import java.awt.Color
 import java.io.File
+import java.util.Random
 import scala.util.{Failure, Success, Try}
 
 class AnotherAlgorithmSpec extends AnyFlatSpec with Matchers {
@@ -15,13 +16,22 @@ class AnotherAlgorithmSpec extends AnyFlatSpec with Matchers {
   }
 
   "AnotherAlgorithm" should "return a maze" in {
-    val maze: GridMaze = AnotherAlgorithm(100, 100)
+    val maze: GridMaze = AnotherAlgorithm(50, 50)
 
     val outputFile = new File("another.png")
-    val dijkstra = Dijkstra(maze)
+
+    def sample[A](list: List[A]) = {
+      val r = new Random()
+      val i = r.nextInt(list.size)
+      list(i)
+    }
     
-    val d = dijkstra.distances(0, 0)
-    val maxDist = d.values.max
+    val cell = sample(maze.allCells.filter(_.canGoTo.nonEmpty))
+    
+    
+    val dijkstra = Dijkstra(maze)
+    val d = dijkstra.distances(cell.row, cell.col)
+    val maxDist = d.values.max.max(1)
     val colours = d map {
       case (cell: Cell, distance) =>
         val c = Math.max(0, Math.min(255, 255 - 255 * distance / maxDist))

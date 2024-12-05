@@ -3,21 +3,21 @@ package com.mikeycaine.ariadne
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import java.io.File
 import java.awt.Color
+import java.io.File
 import scala.util.{Failure, Success, Try}
 
-class WilsonAlgorithmSpec extends AnyFlatSpec with Matchers {
+class HunterKillerAlgorithmSpec extends AnyFlatSpec with Matchers {
 
   def checkTry[F](t: Try[F]): Unit = t match {
     case Success(_) =>
     case Failure(exception: Exception) => fail(exception.getMessage)
   }
 
-  "WilsonAlgorithm" should "return a maze" in {
-    val maze: GridMaze = WilsonAlgorithm(100, 100)
+  "HunterKillerAlgorithm" should "return a maze" in {
+    val maze: GridMaze = HunterKillerAlgorithm(100, 100)
 
-    val outputFile = new File("wilson.png")
+    val outputFile = new File("hunterkiller.png")
     val dijkstra = Dijkstra(maze)
     
     val d = dijkstra.distances(0, 0)
@@ -37,9 +37,9 @@ class WilsonAlgorithmSpec extends AnyFlatSpec with Matchers {
 
   it should "have a solution " in {
 
-    val maze: GridMaze = WilsonAlgorithm(100, 100)
+    val maze: GridMaze = HunterKillerAlgorithm(100, 100)
 
-    val outputFile = new File("wilson2.png")
+    val outputFile = new File("hunterkiller2.png")
     val dijkstra = Dijkstra(maze)
 
     val d: Map[Cell, Int] = dijkstra.distances(0, 0)
