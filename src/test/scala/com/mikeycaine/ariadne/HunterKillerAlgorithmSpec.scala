@@ -39,19 +39,41 @@ class HunterKillerAlgorithmSpec extends AnyFlatSpec with Matchers {
 
     val maze: GridMaze = HunterKillerAlgorithm(100, 100)
 
-    val outputFile = new File("hunterkiller2.png")
+    //val outputFile = new File("hunterkiller2.png")
     val dijkstra = Dijkstra(maze)
 
     val d: Map[Cell, Int] = dijkstra.distances(0, 0)
     val dijkstraColours = GridMaze.distanceColours(d)
 
-    val path = RouteSearch(maze).walk
+    val start = maze.at(0,0).get
+    val end = maze.at(99,99).get
+
+    val path = RouteSearch(maze).startAt(start, end)
     val routeColours = path.map(cell => ((cell.row, cell.col) -> Color.RED)).toMap
 
     val allColours = dijkstraColours ++ routeColours
 
-    checkTry(Grid2Png.writeWithColours(maze, outputFile, allColours))
+    checkTry(Grid2Png.writeWithColours(maze, new File("hunterkiller2.png"), allColours))
+  }
 
+  it should "have a solution using the opposite diagonal" in {
+
+    val maze: GridMaze = HunterKillerAlgorithm(100, 100)
+
+    //val outputFile = new File("hunterkiller2.png")
+    val dijkstra = Dijkstra(maze)
+
+    val d: Map[Cell, Int] = dijkstra.distances(0,99)
+    val dijkstraColours = GridMaze.distanceColours(d)
+
+    val start = maze.at(0, 99).get
+    val end = maze.at(99, 0).get
+    val path = RouteSearch(maze).startAt(start, end)
+    val routeColours = path.map(cell => ((cell.row, cell.col) -> Color.RED)).toMap
+
+    val allColours = dijkstraColours ++ routeColours
+
+    checkTry(Grid2Png.writeWithColours(maze, new File("hunterkiller3.png"), allColours))
   }
 
 }

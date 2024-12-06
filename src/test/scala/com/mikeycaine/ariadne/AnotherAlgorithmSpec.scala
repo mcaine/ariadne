@@ -16,7 +16,7 @@ class AnotherAlgorithmSpec extends AnyFlatSpec with Matchers {
   }
 
   "AnotherAlgorithm" should "return a maze" in {
-    val maze: GridMaze = AnotherAlgorithm(50, 50)
+    val maze: GridMaze = AnotherAlgorithm(100, 100)
 
     val outputFile = new File("another.png")
 

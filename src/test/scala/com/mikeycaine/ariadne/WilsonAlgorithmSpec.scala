@@ -45,7 +45,9 @@ class WilsonAlgorithmSpec extends AnyFlatSpec with Matchers {
     val d: Map[Cell, Int] = dijkstra.distances(0, 0)
     val dijkstraColours = GridMaze.distanceColours(d)
 
-    val path = RouteSearch(maze).walk
+    val start = maze.at(0, 0).get
+    val end = maze.at(99, 99).get
+    val path = RouteSearch(maze).startAt(start, end)
     val routeColours = path.map(cell => ((cell.row, cell.col) -> Color.RED)).toMap
 
     val allColours = dijkstraColours ++ routeColours
