@@ -11,7 +11,7 @@ class RandomWalkAlgorithmSpec extends AnyFlatSpec with Matchers {
 
   def checkTry[F](t: Try[F]): Unit = t match {
     case Success(_) =>
-    case Failure(exception: Exception) => fail(exception.getMessage)
+    case Failure(exception) => fail(exception.getMessage)
   }
 
   "RandomWalkAlgorithm" should "return a maze" in {

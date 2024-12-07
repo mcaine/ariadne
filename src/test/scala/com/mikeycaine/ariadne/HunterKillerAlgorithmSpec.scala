@@ -11,7 +11,7 @@ class HunterKillerAlgorithmSpec extends AnyFlatSpec with Matchers {
 
   def checkTry[F](t: Try[F]): Unit = t match {
     case Success(_) =>
-    case Failure(exception: Exception) => fail(exception.getMessage)
+    case Failure(exception) => fail(exception.getMessage)
   }
 
   "HunterKillerAlgorithm" should "return a maze" in {
