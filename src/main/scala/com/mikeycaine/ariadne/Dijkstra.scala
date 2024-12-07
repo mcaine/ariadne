@@ -15,9 +15,10 @@ case class Dijkstra(maze: GridMaze) {
         var newFrontier = List[Cell]()
 
         frontier.foreach { cell =>
+          val newDist = d(cell) + 1
           cell.canGoTo.foreach { linkedCell =>
             if (!d.keySet.contains(linkedCell)) {
-              d += (linkedCell -> (d(cell) + 1))
+              d += (linkedCell -> newDist)
               newFrontier = linkedCell :: newFrontier
             }
           }
