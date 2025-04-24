@@ -8,12 +8,7 @@ import java.io.File
 import java.util.Random
 import scala.util.{Failure, Success, Try}
 
-class AnotherAlgorithmSpec extends AnyFlatSpec with Matchers {
-
-  def checkTry[F](t: Try[F]): Unit = t match {
-    case Success(_) =>
-    case Failure(exception) => fail(exception.getMessage)
-  }
+class AnotherAlgorithmSpec extends AriadneBaseSpec {
 
   "AnotherAlgorithm" should "return a maze" in {
     val maze: GridMaze = AnotherAlgorithm(100, 100)

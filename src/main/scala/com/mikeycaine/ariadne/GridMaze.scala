@@ -61,8 +61,8 @@ object GridMaze {
     val maxDist = d.values.max
     val colours: Map[(Int, Int), Color] = d map {
       case (cell: Cell, distance) =>
-        val c = Math.max(0, Math.min(255, 255 - 255 * distance / maxDist))
-        (cell.row, cell.col) -> new Color(c, 120, 120)
+        val c = Math.max(0, Math.min(255, 255 - 255 * distance / (Math.max(1,maxDist))))
+        (cell.row, cell.col) -> new Color(c, c, 120)
     }
     colours.toMap
   }
