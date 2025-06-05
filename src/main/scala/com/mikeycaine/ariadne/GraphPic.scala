@@ -107,11 +107,11 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
     graphics.drawLine(endPoints._1, endPoints._2 , endPoints._3, endPoints._4)
   }
 
-  def write(): File = {
+  def write(file: File = GraphPic.tfl): File = {
     val imageType = BufferedImage.TYPE_INT_RGB
     val img = new BufferedImage(width, height, imageType)
     val graphics: Graphics2D = img.createGraphics()
-    val file = GraphPic.tfl
+    //val file = GraphPic.tfl
 
     val strokeWidth = 1.0f
 

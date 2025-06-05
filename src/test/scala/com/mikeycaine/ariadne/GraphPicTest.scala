@@ -1,5 +1,7 @@
 package com.mikeycaine.ariadne
 
+import java.io.File
+
 class GraphPicTest extends AriadneBaseSpec {
 
   // a line of slope 1/2 through the origin
@@ -72,7 +74,7 @@ class GraphPicTest extends AriadneBaseSpec {
     gp.add(end)
     gp.add(Point(-2.0, 0))
     gp.add(Point(2.0, 0))
-    val f = gp.write()
+    val f = gp.write(new File("correctLine.png"))
     println(s"File is $f")
   }
 
@@ -86,7 +88,7 @@ class GraphPicTest extends AriadneBaseSpec {
     gp.add(end)
     gp.add(Point(-2.0, 0))
     gp.add(Point(2.0, 0))
-    val f = gp.write()
+    val f = gp.write(new File("offset.png"))
     println(s"File is $f")
   }
 
@@ -97,7 +99,7 @@ class GraphPicTest extends AriadneBaseSpec {
       gp.add(p)
     }
 
-    val f = gp.write()
+    val f = gp.write(new File("square.png"))
     println(s"File is $f")
   }
 
@@ -108,7 +110,7 @@ class GraphPicTest extends AriadneBaseSpec {
       gp.add(p)
     }
 
-    val f = gp.write()
+    val f = gp.write(new File("pentagon.png"))
     println(s"File is $f")
   }
 
