@@ -1,5 +1,15 @@
 package com.mikeycaine.ariadne
 
+/**
+ * Copyright (c) 2025 Mike Caine
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Any modifications to this file must keep this entire header intact.
+ **/
+
 object GraphPic {
   import java.io.File
 
@@ -27,7 +37,15 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
   var points: List[Point] = List[Point]()
   var lines: List[Line] = List[Line]()
 
-
+  def add(poly: Polygon): Unit = {
+    val starts = poly.points
+    val ends = poly.points.tail :+ poly.points.head
+    val startsAndEnds = starts.zip(ends)
+    startsAndEnds.foreach ( se =>
+      //println(s"Line from ${se._1} to ${se._2}")
+      add(Line.fromPoints(se._1, se._2))
+    )
+  }
 
   def add(p: Point): Unit = {
     points = p :: points
@@ -45,7 +63,7 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
 
   def graphicsEndpointsForLine(line: Line): (Int, Int, Int, Int) = {
 
-    if (line.b > 1e-5) {
+    if (Math.abs(line.b) > 1e-5) {
       val slope = line.a / line.b
       if (Math.abs(slope) < 1.0) {
 
@@ -74,8 +92,8 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
       println("VERtical! ish")
       val topY = centre.y + height / (2.0 * scale) // the left hand side of the pic in geom space
       val bottomY = centre.y - (height - 1) / (2.0 * scale)
-      val topLine = Line(0, 1, -topY) // the line up the left hand side in geom space
-      val bottomLine = Line(0, 1, -bottomY) // the line up the left hand side in geom space
+      val topLine = Line(0, 1, -topY) // the line at the top in geom space
+      val bottomLine = Line(0, 1, -bottomY) // the line at the bottom in geom space
       val tp: Point = Line.intersection(line, topLine)
       val bp: Point = Line.intersection(line, bottomLine)
       val (tx, ty) = scaleToPic(tp.x, tp.y)
@@ -121,6 +139,7 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
 
 case class Point(x: Double, y: Double)
 
+// a line of the form ax + by + c = 0
 case class Line (a: Double, b: Double, c: Double)
 object Line {
   def fromPoints(start: Point, end: Point): Line = {
@@ -147,3 +166,6 @@ object Line {
     }
   }
 }
+
+case class Polygon(points: List[Point])
+
