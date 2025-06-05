@@ -42,7 +42,6 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
     val ends = poly.points.tail :+ poly.points.head
     val startsAndEnds = starts.zip(ends)
     startsAndEnds.foreach ( se =>
-      //println(s"Line from ${se._1} to ${se._2}")
       add(Line.fromPoints(se._1, se._2))
     )
   }
@@ -63,10 +62,7 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
 
   def graphicsEndpointsForLine(line: Line): (Int, Int, Int, Int) = {
 
-    if (Math.abs(line.b) > 1e-5) {
-      val slope = line.a / line.b
-      if (Math.abs(slope) < 1.0) {
-
+    if (Math.abs(line.b) > 1e-5 && (Math.abs(line.a / line.b) < 1.0)) {
         val leftX = centre.x - width / (2.0 * scale) // the left hand side of the pic in geom space
         val rightX = centre.x + (width - 1) / (2.0 * scale)
         val leftLine = Line(1, 0, -leftX) // the line up the left hand side in geom space
@@ -76,20 +72,7 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
         val (lx, ly) = scaleToPic(lp.x, lp.y)
         val (rx, ry) = scaleToPic(rp.x, rp.y)
         (lx, ly, rx, ry)
-      } else {
-        println("meets top maybe")
-        val topY = centre.y + height / (2.0 * scale) // the left hand side of the pic in geom space
-        val bottomY = centre.y - (height - 1) / (2.0 * scale)
-        val topLine = Line(0, 1, -topY) // the line up the left hand side in geom space
-        val bottomLine = Line(0, 1, -bottomY) // the line up the left hand side in geom space
-        val tp: Point = Line.intersection(line, topLine)
-        val bp: Point = Line.intersection(line, bottomLine)
-        val (tx, ty) = scaleToPic(tp.x, tp.y)
-        val (bx, by) = scaleToPic(bp.x, bp.y)
-        (tx, ty, bx, by)
-      }
     } else {
-      println("VERtical! ish")
       val topY = centre.y + height / (2.0 * scale) // the left hand side of the pic in geom space
       val bottomY = centre.y - (height - 1) / (2.0 * scale)
       val topLine = Line(0, 1, -topY) // the line at the top in geom space
@@ -152,10 +135,10 @@ object Line {
 
   def intersection(first: Line, second: Line): Point = {
     val p = first.a * second.b - first.b * second.a
-    println(s"p is $p")
+    //println(s"p is $p")
 
     val x = (second.c * first.b - first.c * second.b) / (first.a * second.b - first.b * second.a)
-    println(s"x is $x")
+    //println(s"x is $x")
 
     if (Math.abs(first.b) > 1e-5) {
       val y = - ( first.c + first.a * x) / first.b

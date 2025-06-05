@@ -13,7 +13,7 @@ import scala.util.{Failure, Success, Try}
 
 class GifWriterSpec extends AriadneBaseSpec {
 
-  "something" should "do something" in {
+  "AnimatedGIFWriter" should "create a gif" in {
 
     val size = 50
     val maze: GridMaze = HunterKillerAlgorithm(size, size)
