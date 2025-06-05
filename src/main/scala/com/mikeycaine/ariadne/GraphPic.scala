@@ -40,24 +40,53 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
   def scaleToPic(x: Double, y: Double) : (Int, Int) = {
     val imgx = (width / 2) + (x - centre.x) * scale
     val imgy = (height / 2) - (y - centre.y) * scale
-    (imgx.toInt, imgy.toInt)
+    (imgx.round.toInt, imgy.round.toInt)
   }
 
   def graphicsEndpointsForLine(line: Line): (Int, Int, Int, Int) = {
-    val leftX = centre.x -width / ( 2.0 * scale) // the left hand side of the pic in geom space
-    val rightX = centre.x + (width - 1) / (2.0 * scale)
-    val leftLine = Line(1, 0, -leftX)  // the line up the left hand side in geom space
-    val rightLine = Line(1, 0, -rightX)  // the line up the left hand side in geom space
-    val lp: Point = Line.intersection(line, leftLine)
-    val rp: Point = Line.intersection(line, rightLine)
-    val (lx, ly) = scaleToPic(lp.x, lp.y)
-    val (rx, ry) = scaleToPic(rp.x, rp.y)
-    (lx, ly, rx, ry)
+
+    if (line.b > 1e-5) {
+      val slope = line.a / line.b
+      if (Math.abs(slope) < 1.0) {
+
+        val leftX = centre.x - width / (2.0 * scale) // the left hand side of the pic in geom space
+        val rightX = centre.x + (width - 1) / (2.0 * scale)
+        val leftLine = Line(1, 0, -leftX) // the line up the left hand side in geom space
+        val rightLine = Line(1, 0, -rightX) // the line up the left hand side in geom space
+        val lp: Point = Line.intersection(line, leftLine)
+        val rp: Point = Line.intersection(line, rightLine)
+        val (lx, ly) = scaleToPic(lp.x, lp.y)
+        val (rx, ry) = scaleToPic(rp.x, rp.y)
+        (lx, ly, rx, ry)
+      } else {
+        println("meets top maybe")
+        val topY = centre.y + height / (2.0 * scale) // the left hand side of the pic in geom space
+        val bottomY = centre.y - (height - 1) / (2.0 * scale)
+        val topLine = Line(0, 1, -topY) // the line up the left hand side in geom space
+        val bottomLine = Line(0, 1, -bottomY) // the line up the left hand side in geom space
+        val tp: Point = Line.intersection(line, topLine)
+        val bp: Point = Line.intersection(line, bottomLine)
+        val (tx, ty) = scaleToPic(tp.x, tp.y)
+        val (bx, by) = scaleToPic(bp.x, bp.y)
+        (tx, ty, bx, by)
+      }
+    } else {
+      println("VERtical! ish")
+      val topY = centre.y + height / (2.0 * scale) // the left hand side of the pic in geom space
+      val bottomY = centre.y - (height - 1) / (2.0 * scale)
+      val topLine = Line(0, 1, -topY) // the line up the left hand side in geom space
+      val bottomLine = Line(0, 1, -bottomY) // the line up the left hand side in geom space
+      val tp: Point = Line.intersection(line, topLine)
+      val bp: Point = Line.intersection(line, bottomLine)
+      val (tx, ty) = scaleToPic(tp.x, tp.y)
+      val (bx, by) = scaleToPic(bp.x, bp.y)
+      (tx, ty, bx, by)
+    }
   }
 
   def drawLine(graphics: Graphics2D, line: Line) = {
     val endPoints = graphicsEndpointsForLine(line)
-    graphics.drawLine(endPoints._1, endPoints._2, endPoints._3, endPoints._4)
+    graphics.drawLine(endPoints._1, endPoints._2 , endPoints._3, endPoints._4)
   }
 
   def write(): File = {
@@ -76,12 +105,13 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
 
     graphics.setStroke(new BasicStroke(strokeWidth))
     graphics.setColor(Color.RED)
+    val pointSize = 8
     for (point <- points) {
       //val imgx = (width / 2) + (point.x - centre.x) * scale
       //val imgy = (height / 2) - (point.y - centre.y) * scale
       val (imgx, imgy) = scaleToPic(point.x, point.y)
       //println (s"imgx = $imgx, imgy = $imgy")
-      graphics.fillOval(imgx.toInt, imgy.toInt, 5, 5)
+      graphics.fillOval(imgx - (pointSize/2), imgy - (pointSize/2), pointSize, pointSize)
     }
 
     ImageIO.write(img, "png", file)
