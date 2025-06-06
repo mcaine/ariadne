@@ -41,10 +41,10 @@ object Grid2Png {
       val (x1, y1, x2, y2) = corners(row, column)
       grid.at(row, column).foreach { cell =>
         graphics.setColor(Color.BLACK)
-        if (!cell.canGoNorth) graphics.drawLine(x1, y1, x2, y1)
-        if (!cell.canGoSouth) graphics.drawLine(x1, y2, x2, y2)
-        if (!cell.canGoWest) graphics.drawLine(x1, y1, x1, y2)
-        if (!cell.canGoEast) graphics.drawLine(x2, y1, x2, y2)
+        if (!grid.canGoNorthFrom(cell)) graphics.drawLine(x1, y1, x2, y1)
+        if (!grid.canGoSouthFrom(cell)) graphics.drawLine(x1, y2, x2, y2)
+        if (!grid.canGoWestFrom(cell)) graphics.drawLine(x1, y1, x1, y2)
+        if (!grid.canGoEastFrom(cell)) graphics.drawLine(x2, y1, x2, y2)
       }
     }
 

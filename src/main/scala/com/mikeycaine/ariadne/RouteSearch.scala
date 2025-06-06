@@ -30,7 +30,7 @@ case class RouteSearch(val grid: GridMaze) {
       val choices = end.canGoTo.filter(!current.contains(_))
 
       choices.foreach { choice =>
-        q.enqueue(choice +: current)
+        q.enqueue(choice.contents +: current)
       }
 
       current = q.dequeue()

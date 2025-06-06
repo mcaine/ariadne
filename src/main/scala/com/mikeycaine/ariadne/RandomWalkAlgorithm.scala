@@ -21,7 +21,7 @@ object RandomWalkAlgorithm {
 
     while (visited.size < maze.rows * maze.cols) {
       visited = visited + current
-      val neighbours = current.neighbours
+      val neighbours = maze.neighbours(current)
       val neighbour = neighbours(rand.nextInt(neighbours.size))
       if (visited.contains(neighbour)) {
         current = neighbour

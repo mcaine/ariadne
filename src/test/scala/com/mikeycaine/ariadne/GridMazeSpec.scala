@@ -12,19 +12,13 @@ class GridMazeSpec extends AnyFlatSpec with Matchers {
   it should "find a cell that exists" in {
     val gridMaze = GridMaze(10, 10)
 
-    gridMaze.at((0,0)) match {
-      case Some(Cell(0,0, gridMaze)) => succeed
-      case _ => fail()
-    }
+    assert(gridMaze.at((0,0)).isDefined)
   }
 
   it should "not find a cell that doesn't exist" in {
     val gridMaze = GridMaze(10, 10)
 
-    gridMaze.at((-2, -2)) match {
-      case None => succeed
-      case _ => fail("shouldn't have got a cell")
-    }
+    assert(gridMaze.at((-2, -2)).isEmpty)
   }
 
   it should "respect links" in {

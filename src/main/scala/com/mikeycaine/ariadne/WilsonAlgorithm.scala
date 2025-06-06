@@ -21,7 +21,7 @@ object WilsonAlgorithm {
       var path = List(cell)
 
       while (unvisited.contains(cell)) {
-        cell = sample(cell.neighbours)
+        cell = sample(maze.neighbours(cell))
         val position = path.indexOf(cell)
         if (position == -1) {
           path = path :+ cell

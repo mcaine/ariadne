@@ -8,52 +8,64 @@ trait Maze[K,C] {
 
   def at(k: K): Option[C] = cells.get(k)
   def allCells: List[C] = cells.values.toList
+  def neighbours(cell: C): List[C]
 }
 
-case class Cell(row: Int, col: Int, grid: GridMaze) { me: Cell =>
+class Linkable[C] { 
 
-  private var links: Set[Cell] = Set.empty[Cell]
+  private var links: Set[Linkable[C]] = Set.empty[Linkable[C]]
 
-  def link(target: Cell, biDirectional: Boolean = true): Unit = {
+  def link(target: Linkable[C], biDirectional: Boolean = true): Unit = {
     links = links + target
     if (biDirectional) {
-      target.link(me, false)
+      target.link(this, false)
     }
   }
 
-  def unlink(target: Cell, biDirectional: Boolean = true): Unit = {
+  def unlink(target: Linkable[C], biDirectional: Boolean = true): Unit = {
     links = links - target
     if (biDirectional) {
-      target.unlink(me, false)
+      target.unlink(this, false)
     }
   }
 
-  def isLinkedTo(target: Cell): Boolean = links.contains(target)
-  def isLinkedTo(targetOpt: Option[Cell]): Boolean = targetOpt match {
-    case Some(cell) => isLinkedTo(cell)
+  def isLinkedTo(target: Linkable[C]): Boolean = links.contains(target)
+  def isLinkedTo(targetOpt: Option[Linkable[C]]): Boolean = targetOpt match {
+    case Some(l) => isLinkedTo(l)
     case _ => false
   }
 
-  def north: Option[Cell] = grid.at(row - 1, col)
-  def south: Option[Cell] = grid.at(row + 1, col)
-  def west: Option[Cell] = grid.at(row, col - 1)
-  def east: Option[Cell] = grid.at(row, col + 1)
+  def canGoTo: List[Linkable[C]] = links.toList
+  
+  def contents = this.asInstanceOf[C]
+}
 
-  def canGoNorth: Boolean = isLinkedTo(north)
-  def canGoSouth: Boolean = isLinkedTo(south)
-  def canGoWest: Boolean = isLinkedTo(west)
-  def canGoEast: Boolean = isLinkedTo(east)
+class Cell(val row: Int, val col: Int) extends Linkable[Cell]
 
-  def neighbours: List[Cell] = north.toList ++ south.toList ++ east.toList ++ west.toList
-
-  def canGoTo: List[Cell] = links.toList
+object Cell {
+  def apply(row: Int, col: Int) = new Cell(row, col)
 }
 
 case class GridMaze(rows: Int, cols: Int ) extends Maze[(Int,Int), Cell] { me =>
   override def initCells: Map[(Int, Int), Cell] = (for {
     row <- 0 until rows
     col <- 0 until cols
-  } yield (row, col) -> Cell(row, col, me)).toMap
+  } yield (row, col) -> Cell(row, col)).toMap
+
+  def northFrom(cell: Cell): Option[Cell] = at(cell.row - 1, cell.col)
+  def southFrom(cell: Cell): Option[Cell] = at(cell.row + 1, cell.col)
+  def westFrom(cell: Cell): Option[Cell] = at(cell.row, cell.col - 1)
+  def eastFrom(cell: Cell): Option[Cell] = at(cell.row, cell.col + 1)
+
+  def canGoNorthFrom(cell: Cell): Boolean = cell.isLinkedTo(northFrom(cell))
+  def canGoSouthFrom(cell: Cell): Boolean = cell.isLinkedTo(southFrom(cell))
+  def canGoWestFrom(cell: Cell): Boolean = cell.isLinkedTo(westFrom(cell))
+  def canGoEastFrom(cell: Cell): Boolean = cell.isLinkedTo(eastFrom(cell))
+
+  def neighbours(cell:Cell): List[Cell] = northFrom(cell).toList ++
+                                          southFrom(cell).toList ++
+                                          eastFrom(cell).toList ++
+                                          westFrom(cell).toList
 }
 
 object GridMaze {
