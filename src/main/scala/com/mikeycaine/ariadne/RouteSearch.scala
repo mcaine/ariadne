@@ -4,21 +4,6 @@ import scala.collection.mutable
 
 
 case class RouteSearch(val grid: GridMaze) {
-//  def walk: Seq[Cell] = {
-//
-//    val row = 0
-//    val col = 0
-//
-//    // TODO handle the case the target doesnt exist
-//    //val target = grid.at(grid.rows - 1, grid.cols - 1).get
-//
-//    grid.at(row, col) match {
-//      case None => throw new Exception("No start cell") // TODO
-//      case Some(cell) => startAt(cell, target)
-//    }
-//  }
-//  
-//  def walk(row: Int, col: Int) :
 
   def startAt(start: Cell, target: Cell): Seq[Cell] = {
 
@@ -40,11 +25,4 @@ case class RouteSearch(val grid: GridMaze) {
 
     current.reverse
   }
-
-  //  // TODO handle empty list
-  //  def oneOf[F](from: Seq[F]) = {
-  //    val r = new Random
-  //    val i = r.nextInt(from.size)
-  //    from(i)
-  //  }
 }

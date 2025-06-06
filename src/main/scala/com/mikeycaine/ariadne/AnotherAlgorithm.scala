@@ -60,7 +60,7 @@ object AnotherAlgorithm {
 
     val cell = sample(maze.allCells.filter(_.canGoTo.nonEmpty))
     val dijkstra = Dijkstra(maze)
-    val d = dijkstra.distances(cell.row, cell.col)
+    val d = dijkstra.distances(cell)
 
     // find cells that are linked to something but not to our random cell
     val disconnected = maze.allCells.filter(_.canGoTo.nonEmpty).filter(!d.keySet.contains(_))

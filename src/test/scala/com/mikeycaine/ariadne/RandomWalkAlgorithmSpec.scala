@@ -20,7 +20,8 @@ class RandomWalkAlgorithmSpec extends AnyFlatSpec with Matchers {
     val outputFile = new File("randomwalk.png")
     val dijkstra = Dijkstra(maze)
 
-    val d = dijkstra.distances(50, 50)
+    val start = maze.at(50, 50).get
+    val d = dijkstra.distances(start)
     val maxDist = d.values.max
     val colours = d map {
       case (cell: Cell, distance) =>

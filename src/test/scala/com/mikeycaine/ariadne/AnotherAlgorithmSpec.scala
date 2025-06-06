@@ -25,7 +25,7 @@ class AnotherAlgorithmSpec extends AriadneBaseSpec {
     
     
     val dijkstra = Dijkstra(maze)
-    val d = dijkstra.distances(cell.row, cell.col)
+    val d = dijkstra.distances(cell)
     val maxDist = d.values.max.max(1)
     val colours = d map {
       case (cell: Cell, distance) =>

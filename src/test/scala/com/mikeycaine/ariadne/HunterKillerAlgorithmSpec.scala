@@ -19,8 +19,8 @@ class HunterKillerAlgorithmSpec extends AnyFlatSpec with Matchers {
 
     val outputFile = new File("hunterkiller.png")
     val dijkstra = Dijkstra(maze)
-    
-    val d = dijkstra.distances(0, 0)
+    val start = maze.at(0, 0).get
+    val d = dijkstra.distances(start)
     val maxDist = d.values.max
     val colours = d map {
       case (cell: Cell, distance) =>
@@ -42,12 +42,13 @@ class HunterKillerAlgorithmSpec extends AnyFlatSpec with Matchers {
     //val outputFile = new File("hunterkiller2.png")
     val dijkstra = Dijkstra(maze)
 
-    val d: Map[Cell, Int] = dijkstra.distances(0, 0)
+    val start = maze.at(0, 0).get
+    val end = maze.at(99,99).get
+    
+    val d: Map[Cell, Int] = dijkstra.distances(start)
     val dijkstraColours = GridMaze.distanceColours(d)
 
-    val start = maze.at(0,0).get
-    val end = maze.at(99,99).get
-
+    
     val path = RouteSearch(maze).startAt(start, end)
     val routeColours = path.map(cell => ((cell.row, cell.col) -> Color.RED)).toMap
 
@@ -63,11 +64,12 @@ class HunterKillerAlgorithmSpec extends AnyFlatSpec with Matchers {
     //val outputFile = new File("hunterkiller2.png")
     val dijkstra = Dijkstra(maze)
 
-    val d: Map[Cell, Int] = dijkstra.distances(0,99)
-    val dijkstraColours = GridMaze.distanceColours(d)
-
     val start = maze.at(0, 99).get
     val end = maze.at(99, 0).get
+    val d: Map[Cell, Int] = dijkstra.distances(start)
+    val dijkstraColours = GridMaze.distanceColours(d)
+
+
     val path = RouteSearch(maze).startAt(start, end)
     val routeColours = path.map(cell => ((cell.row, cell.col) -> Color.RED)).toMap
 
