@@ -11,13 +11,13 @@ object RandomWalkAlgorithm {
   }
 
   private def linkIt(maze: GridMaze): Unit = {
-    var visited: Set[Cell] = Set.empty
+    var visited: Set[GridMazeCell] = Set.empty
 
     val rand = new Random
     val startRow = rand.nextInt(maze.rows)
     val startCol = rand.nextInt(maze.cols)
 
-    var current: Cell = maze.at(startRow, startCol).get
+    var current: GridMazeCell = maze.at(startRow, startCol).get
 
     while (visited.size < maze.rows * maze.cols) {
       visited = visited + current

@@ -15,7 +15,7 @@ object AnotherAlgorithm {
     val r1 = Random.shuffle(r).take(maze.rows / 4)
 
     val rand = new Random()
-    var visited: Set[Cell] = Set.empty
+    var visited: Set[GridMazeCell] = Set.empty
 
     for (newRow <- r1) {
       var first = rand.nextInt(maze.cols)
@@ -66,7 +66,7 @@ object AnotherAlgorithm {
     val disconnected = maze.allCells.filter(_.canGoTo.nonEmpty).filter(!d.keySet.contains(_))
     for (disc <- disconnected) {
       for (dontcare <- disc.canGoTo) {
-        disc.unlink(dontcare)
+        disc.unlink(dontcare.contents)
       }
     }
 

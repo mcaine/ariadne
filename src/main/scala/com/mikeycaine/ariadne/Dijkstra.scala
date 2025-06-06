@@ -1,15 +1,15 @@
 package com.mikeycaine.ariadne
 
 case class Dijkstra(maze: GridMaze) {
-  def distances(from: Cell): Map[Cell, Int] = {
-    var d = Map[Cell, Int]()
+  def distances(from: GridMazeCell): Map[GridMazeCell, Int] = {
+    var d = Map[GridMazeCell, Int]()
     d += (from -> 0)
     
-    var frontier = List[Cell](from)
+    var frontier = List[GridMazeCell](from)
 
     while (frontier.nonEmpty) {
 
-      var newFrontier = List[Cell]()
+      var newFrontier = List[GridMazeCell]()
 
       frontier.foreach { cell =>
         val newDist = d(cell) + 1

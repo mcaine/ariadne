@@ -24,7 +24,7 @@ class WilsonAlgorithmSpec extends AnyFlatSpec with Matchers {
     val d = dijkstra.distances(start)
     val maxDist = d.values.max
     val colours = d map {
-      case (cell: Cell, distance) =>
+      case (cell: GridMazeCell, distance) =>
         val c = Math.max(0, Math.min(255, 255 - 255 * distance / maxDist))
         val d = 255 - c
         val colour = new Color(c, 120, 120)
@@ -46,7 +46,7 @@ class WilsonAlgorithmSpec extends AnyFlatSpec with Matchers {
     val start = maze.at(0, 0).get
     val end = maze.at(99, 99).get
 
-    val d: Map[Cell, Int] = dijkstra.distances(start)
+    val d: Map[GridMazeCell, Int] = dijkstra.distances(start)
     val dijkstraColours = GridMaze.distanceColours(d)
 
     val path = RouteSearch(maze).startAt(start, end)

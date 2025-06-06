@@ -11,10 +11,10 @@ class GIFWriterSpec extends AriadneBaseSpec {
     val maze: GridMaze = HunterKillerAlgorithm(size, size)
 
     val start = maze.at(0, 0).get
-    val distances: Map[Cell, Int] = Dijkstra(maze).distances(start)
+    val distances: Map[GridMazeCell, Int] = Dijkstra(maze).distances(start)
     
     val end = maze.at(size - 1, size - 1).get
-    val path: Seq[Cell] = RouteSearch(maze).startAt(start, end)
+    val path: Seq[GridMazeCell] = RouteSearch(maze).startAt(start, end)
     val pathLength = path.length
     //val maxDist = distances.values.max
 

@@ -11,68 +11,65 @@ trait Maze[K,C] {
   def neighbours(cell: C): List[C]
 }
 
-class Linkable[C] { 
+class Cell[C <: Cell[C]] {
 
-  private var links: Set[Linkable[C]] = Set.empty[Linkable[C]]
+  var links: Set[C] = Set.empty[C]
 
-  def link(target: Linkable[C], biDirectional: Boolean = true): Unit = {
+  def link(target: C, biDirectional: Boolean = true): Unit = {
     links = links + target
     if (biDirectional) {
-      target.link(this, false)
+      target.link(this.asInstanceOf[C], false)
     }
   }
 
-  def unlink(target: Linkable[C], biDirectional: Boolean = true): Unit = {
+  def unlink(target: C, biDirectional: Boolean = true): Unit = {
     links = links - target
     if (biDirectional) {
-      target.unlink(this, false)
+      target.unlink(this.asInstanceOf[C], false)
     }
   }
 
-  def isLinkedTo(target: Linkable[C]): Boolean = links.contains(target)
-  def isLinkedTo(targetOpt: Option[Linkable[C]]): Boolean = targetOpt match {
-    case Some(l) => isLinkedTo(l)
-    case _ => false
-  }
+  def isLinkedTo(target: C): Boolean = links.contains(target)
+  def isLinkedTo(targetOpt: Option[C]): Boolean = targetOpt.map(isLinkedTo(_)).getOrElse(false)
 
-  def canGoTo: List[Linkable[C]] = links.toList
-  
+  def canGoTo: List[Cell[C]] = links.toList
+
   def contents = this.asInstanceOf[C]
 }
 
-class Cell(val row: Int, val col: Int) extends Linkable[Cell]
+class GridMazeCell(val row: Int, val col: Int) extends Cell[GridMazeCell]
 
-object Cell {
-  def apply(row: Int, col: Int) = new Cell(row, col)
+object GridMazeCell {
+  def apply(row: Int, col: Int) = new GridMazeCell(row, col)
 }
 
-case class GridMaze(rows: Int, cols: Int ) extends Maze[(Int,Int), Cell] { me =>
-  override def initCells: Map[(Int, Int), Cell] = (for {
+case class GridMaze(rows: Int, cols: Int ) extends Maze[(Int,Int), GridMazeCell] { me =>
+  override def initCells: Map[(Int, Int), GridMazeCell] = (for {
     row <- 0 until rows
     col <- 0 until cols
-  } yield (row, col) -> Cell(row, col)).toMap
+  } yield (row, col) -> GridMazeCell(row, col)).toMap
 
-  def northFrom(cell: Cell): Option[Cell] = at(cell.row - 1, cell.col)
-  def southFrom(cell: Cell): Option[Cell] = at(cell.row + 1, cell.col)
-  def westFrom(cell: Cell): Option[Cell] = at(cell.row, cell.col - 1)
-  def eastFrom(cell: Cell): Option[Cell] = at(cell.row, cell.col + 1)
+  def northFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row - 1, cell.col)
+  def southFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row + 1, cell.col)
+  def westFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row, cell.col - 1)
+  def eastFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row, cell.col + 1)
 
-  def canGoNorthFrom(cell: Cell): Boolean = cell.isLinkedTo(northFrom(cell))
-  def canGoSouthFrom(cell: Cell): Boolean = cell.isLinkedTo(southFrom(cell))
-  def canGoWestFrom(cell: Cell): Boolean = cell.isLinkedTo(westFrom(cell))
-  def canGoEastFrom(cell: Cell): Boolean = cell.isLinkedTo(eastFrom(cell))
+  def canGoNorthFrom(cell: GridMazeCell): Boolean = cell.isLinkedTo(northFrom(cell))
+  def canGoSouthFrom(cell: GridMazeCell): Boolean = cell.isLinkedTo(southFrom(cell))
+  def canGoWestFrom(cell: GridMazeCell): Boolean = cell.isLinkedTo(westFrom(cell))
+  def canGoEastFrom(cell: GridMazeCell): Boolean = cell.isLinkedTo(eastFrom(cell))
 
-  def neighbours(cell:Cell): List[Cell] = northFrom(cell).toList ++
+  def neighbours(cell:GridMazeCell): List[GridMazeCell] = northFrom(cell).toList ++
                                           southFrom(cell).toList ++
                                           eastFrom(cell).toList ++
                                           westFrom(cell).toList
 }
 
 object GridMaze {
-  def distanceColours(d: Map[Cell, Int]): Map[(Int, Int), Color] = {
+  def distanceColours(d: Map[GridMazeCell, Int]): Map[(Int, Int), Color] = {
     val maxDist = d.values.max
     val colours: Map[(Int, Int), Color] = d map {
-      case (cell: Cell, distance) =>
+      case (cell: GridMazeCell, distance) =>
         val c = Math.max(0, Math.min(255, 255 - 255 * distance / (Math.max(1,maxDist))))
         (cell.row, cell.col) -> new Color(c, c, 120)
     }

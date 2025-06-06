@@ -4,14 +4,14 @@ object HunterKillerAlgorithm {
 
   import Utils.*
 
-  def randomCell(maze: Maze[_, Cell]): Cell = sample(maze.allCells)
+  def randomCell(maze: Maze[_, GridMazeCell]): GridMazeCell = sample(maze.allCells)
   
-  def unvisitedNeighbours(maze: Maze[_,Cell], cell: Cell): List[Cell] = maze.neighbours(cell).filter(_.canGoTo.isEmpty)
-  def visitedNeighbours(maze: Maze[_,Cell], cell: Cell): List[Cell] = maze.neighbours(cell).filter(_.canGoTo.nonEmpty)
-  def unlinkedCells(maze: Maze[_, Cell]) = maze.allCells.filter(_.canGoTo.isEmpty)
+  def unvisitedNeighbours(maze: Maze[_,GridMazeCell], cell: GridMazeCell): List[GridMazeCell] = maze.neighbours(cell).filter(_.canGoTo.isEmpty)
+  def visitedNeighbours(maze: Maze[_,GridMazeCell], cell: GridMazeCell): List[GridMazeCell] = maze.neighbours(cell).filter(_.canGoTo.nonEmpty)
+  def unlinkedCells(maze: Maze[_, GridMazeCell]) = maze.allCells.filter(_.canGoTo.isEmpty)
 
   @annotation.tailrec
-  def process(mz: Maze[_, Cell],  current: Cell): Unit = {
+  def process(mz: Maze[_, GridMazeCell], current: GridMazeCell): Unit = {
     val unvisited = unvisitedNeighbours(mz, current)
     if (unvisited.nonEmpty) {
       val neighbour = sample(unvisited)

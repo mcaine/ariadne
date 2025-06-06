@@ -5,9 +5,9 @@ import scala.collection.mutable
 
 case class RouteSearch(val grid: GridMaze) {
 
-  def startAt(start: Cell, target: Cell): Seq[Cell] = {
+  def startAt(start: GridMazeCell, target: GridMazeCell): Seq[GridMazeCell] = {
 
-    val q = mutable.Queue.empty[List[Cell]]
+    val q = mutable.Queue.empty[List[GridMazeCell]]
     var current = List(start)
 
     while {

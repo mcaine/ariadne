@@ -10,7 +10,7 @@ object WilsonAlgorithm {
     list(i)
   }
 
-  private def linkIt(maze: Maze[_, Cell]): Unit = {
+  private def linkIt(maze: Maze[_, GridMazeCell]): Unit = {
     var unvisited = maze.allCells
     var first = sample(unvisited)
     unvisited = unvisited.filter(_ != first)
