@@ -114,6 +114,21 @@ class GraphPicTest extends AriadneBaseSpec {
     println(s"File is $f")
   }
 
+  it should "draw a series of lines" in {
+    val gp = GraphPic(width = 1500, height = 1500, scale = 25)
+    for (i <- -20 to 20) {
+      val first = Point(-i, 8.0)
+      val second = Point(i, -8.0)
+      val line = Line.fromPoints(first, second)
+      gp.add(line)
+      gp.add(first)
+      gp.add(second)
+    }
+
+    val f = gp.write(new File("lines.png"))
+    println(s"File is $f")
+  }
+
 
 
 }
