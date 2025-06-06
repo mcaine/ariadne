@@ -122,6 +122,10 @@ class GraphPic (width: Int, height:Int, centre: Point, scale: Int) {
 
 case class Point(x: Double, y: Double)
 
+object Points {
+  def midpoint(p: Point, q: Point) = Point((p.x + q.x) / 2.0, (p.y + q.y) / 2.0)
+}
+
 // a line of the form ax + by + c = 0
 case class Line (a: Double, b: Double, c: Double)
 object Line {
@@ -131,6 +135,14 @@ object Line {
     val b = end.x - start.x
     val c = start.x * end.y - end.x * start.y
     this(a,b,c)
+  }
+  
+  // a line that is orthogonal to the line between two points, and passes through the midpoint between them
+  def orthogonalBisector(p: Point, q: Point): Line = {
+    val lineThrough = fromPoints(p, q)
+    val midpoint = Points.midpoint(p, q)
+    val c = lineThrough.b * midpoint.x - lineThrough.a * midpoint.y
+    Line(-lineThrough.b, lineThrough.a, c)
   }
 
   def intersection(first: Line, second: Line): Point = {
