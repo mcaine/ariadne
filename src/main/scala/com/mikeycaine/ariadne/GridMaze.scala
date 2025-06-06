@@ -49,10 +49,10 @@ case class GridMaze(rows: Int, cols: Int ) extends Maze[(Int,Int), GridMazeCell]
     col <- 0 until cols
   } yield (row, col) -> GridMazeCell(row, col)).toMap
 
-  def northFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row - 1, cell.col)
-  def southFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row + 1, cell.col)
-  def westFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row, cell.col - 1)
-  def eastFrom(cell: GridMazeCell): Option[GridMazeCell] = at(cell.row, cell.col + 1)
+  def northFrom(cell: GridMazeCell): Option[GridMazeCell] = at((cell.row - 1, cell.col))
+  def southFrom(cell: GridMazeCell): Option[GridMazeCell] = at((cell.row + 1, cell.col))
+  def westFrom(cell: GridMazeCell): Option[GridMazeCell] = at((cell.row, cell.col - 1))
+  def eastFrom(cell: GridMazeCell): Option[GridMazeCell] = at((cell.row, cell.col + 1))
 
   def canGoNorthFrom(cell: GridMazeCell): Boolean = cell.isLinkedTo(northFrom(cell))
   def canGoSouthFrom(cell: GridMazeCell): Boolean = cell.isLinkedTo(southFrom(cell))
